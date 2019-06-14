@@ -28,19 +28,23 @@ struct NODE {
 };
 
 template <class _Val>
-void initTree(NODE<_Val>*& T) { T = NULL; }
+void initTree(NODE<_Val>*& T) {
+	T = NULL;
+}
 template <class _Val>
 NODE<_Val>* searchNode(NODE<_Val>* T, _Val data) {
-	if (!T) {
+	if (T) {
 		if (T->key == data)
 			return T;
-		else {
-			searchNode(T->pLeft, data);
-			searchNode(T->pRight, data);
-		}
+		else if (T->key > data)
+			return searchNode(T->pLeft, data);
+		else
+			return searchNode(T->pRight, data);
+		// must return value
 	}
 	return NULL;
 }
+
 template <class _Val>
 int insertNode(NODE<_Val>*& T, _Val data) {
 	if (T != NULL) {
@@ -48,11 +52,10 @@ int insertNode(NODE<_Val>*& T, _Val data) {
 			return EXISTENCE;
 		else if (T->key > data)
 			return insertNode(T->pLeft, data);
-		else {
+		else
 			return insertNode(T->pRight, data);
-		}
 	}
-	T = new NODE<_Val>;
+	T = (NODE<_Val>*)malloc(sizeof(NODE<_Val>));
 	if (T == NULL) {
 		cout << "Leak memory\n";
 		return FAIL;
@@ -123,7 +126,12 @@ int main(int argc, char* const argv[]) {
 	{
 		insertNode(T, random(VALUE_RANDOM) + i);
 	}
+	insertNode(T, 122);
 	printTree(T);
+	NODE<int>* p = searchNode(T, 122);
+	if (p)
+		cout << "SDD=  " << p->key << endl;
+
 	system("pause");
 	return 0;
 }
