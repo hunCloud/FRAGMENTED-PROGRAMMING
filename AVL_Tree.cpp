@@ -11,14 +11,13 @@ struct AVLNode {
 	AVLNode* pLeft;
 	AVLNode* pRight;
 };
-// rotate Left-Left
+
 template <typename _Val>
 void rotateLL(AVLNode<_Val>*& T) {
 	AVLNode<_Val>* T1 = T->pLeft;
 	T->pLeft = T1->pRight;
 	T1->pRight = T;
-	switch (T1->balFactor)
-	{
+	switch (T1->balFactor) {
 	case LH: T->balFactor = EH;
 		T1->balFactor = EH;
 		break;
@@ -30,13 +29,13 @@ void rotateLL(AVLNode<_Val>*& T) {
 	}
 	T = T1;
 }
+
 template <typename _Val>
 void rotateRR(AVLNode<_Val>*& T) {
 	AVLNode<_Val>* T1 = T->pRight;
 	T->pRight = T1->pLeft;
 	T1->pLeft = T;
-	switch (T1->balFactor)
-	{
+	switch (T1->balFactor) {
 	case RH: T1->balFactor = EH;
 		T->balFactor = EH;
 	case EH: T1->balFactor = LH;
@@ -45,6 +44,7 @@ void rotateRR(AVLNode<_Val>*& T) {
 		break;
 	}
 }
+
 template <typename _Val>
 void rotateLR(AVLNode<_Val>*& T) {
 	AVLNode<_Val>* T1 = T->pLeft;
@@ -53,8 +53,7 @@ void rotateLR(AVLNode<_Val>*& T) {
 	T1->pRight = T2->pLeft;
 	T2->pLeft = T1;
 	T2->pRight = T;
-	switch (T2->balFactor)
-	{
+	switch (T2->balFactor) {
 	case LH: T->balFactor = RH;
 		T1->balFactor = EH;
 		break;
@@ -70,6 +69,7 @@ void rotateLR(AVLNode<_Val>*& T) {
 	T2->balFactor = EH;
 	T = T2;
 }
+
 template <typename _Val>
 void rotateRL(AVLNode<_Val>*& T) {
 	AVLNode<_Val>* T1 = T->pRight;
@@ -78,8 +78,7 @@ void rotateRL(AVLNode<_Val>*& T) {
 	T1->pLeft = T2->pRight;
 	T2->pLeft = T;
 	T2->pRight = T1;
-	switch (T2->balFactor)
-	{
+	switch (T2->balFactor) {
 	case LH: T->balFactor = EH;
 		T1->balFactor = RH;
 		break;
@@ -93,10 +92,10 @@ void rotateRL(AVLNode<_Val>*& T) {
 	T2->balFactor = EH;
 	T = T2;
 }
+
 template <typename _Val>
 int balanceLeft(AVLNode<_Val>*& T) {
-	switch (T->pLeft->balFactor)
-	{
+	switch (T->pLeft->balFactor) {
 	case LH: rotateLL(T); return 2;
 	case EH: rotateLL(T); return 1;
 	case RH: rotateLR(T); return 2;
@@ -105,6 +104,7 @@ int balanceLeft(AVLNode<_Val>*& T) {
 	}
 	return 0;
 }
+
 template <typename _Val>
 int balanceRight(AVLNode<_Val>*& T) {
 	switch (T->pRight->balFactor) {
@@ -114,6 +114,7 @@ int balanceRight(AVLNode<_Val>*& T) {
 	}
 	return 0;
 }
+
 template <typename _Val>
 int insertNode(AVLNode<_Val>*& T, _Val data) {
 	int res;
@@ -124,8 +125,7 @@ int insertNode(AVLNode<_Val>*& T, _Val data) {
 			res = insertNode(T->pLeft, data);
 			if (res < 2)
 				return res;
-			switch (T->balFactor)
-			{
+			switch (T->balFactor) {
 			case RH: T->balFactor = EH;
 				return 1;
 			case EH: T->balFactor = LH;
@@ -140,8 +140,7 @@ int insertNode(AVLNode<_Val>*& T, _Val data) {
 			res = insertNode(T->pRight, data);
 			if (res < 2)
 				return res;
-			switch (T->balFactor)
-			{
+			switch (T->balFactor) {
 			case LH: T->balFactor = EH;
 				return 1;
 			case EH: T->balFactor = RH;
@@ -161,6 +160,7 @@ int insertNode(AVLNode<_Val>*& T, _Val data) {
 	T->pLeft = T->pRight = nullptr;
 	return 2;
 }
+
 template <typename _Val>
 void printAVL(AVLNode<_Val>* T) {
 	if (T != nullptr) {
@@ -169,6 +169,7 @@ void printAVL(AVLNode<_Val>* T) {
 		printAVL(T->pRight);
 	}
 }
+
 template <typename _Val>
 int searchStandFor(AVLNode<_Val>*& p, AVLNode<_Val>*& q) {
 	int res;
@@ -176,8 +177,7 @@ int searchStandFor(AVLNode<_Val>*& p, AVLNode<_Val>*& q) {
 		res = searchStandFor(p, q->pLeft);
 		if (res < 2)
 			return res;
-		switch (q->balFactor)
-		{
+		switch (q->balFactor) {
 		case LH: q->balFactor = EH;
 			return 2;
 		case EH: q->balFactor = RH;
@@ -194,6 +194,7 @@ int searchStandFor(AVLNode<_Val>*& p, AVLNode<_Val>*& q) {
 		return 2;
 	}
 }
+
 template <typename _Val>
 int deleteNode(AVLNode<_Val>*& T, _Val data) {
 	int res;
@@ -240,8 +241,7 @@ int deleteNode(AVLNode<_Val>*& T, _Val data) {
 			res = searchStandFor(p, T->pRight);
 			if (res < 2)
 				return res;
-			switch (T->balFactor)
-			{
+			switch (T->balFactor) {
 			case RH: T->balFactor = EH;
 				return 2;
 			case EH: T->balFactor = LH;
@@ -255,6 +255,7 @@ int deleteNode(AVLNode<_Val>*& T, _Val data) {
 		return res;
 	}
 }
+
 int main(int argc, char* const argv[]) {
 	AVLNode<int>* T;
 	T = nullptr;
@@ -271,7 +272,6 @@ int main(int argc, char* const argv[]) {
 	deleteNode(T, 14);
 	cout << '\n';
 	printAVL(T);
-	//insertNode(T, i);
 	system("pause");
 	return 0;
 }
